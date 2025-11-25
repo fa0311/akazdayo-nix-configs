@@ -30,5 +30,6 @@
     noto-fonts-color-emoji
     ipafont
     kochi-substitute
+    inter
   ];
 }

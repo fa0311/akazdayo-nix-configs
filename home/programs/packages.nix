@@ -6,26 +6,14 @@
 }: {
   home.packages =
     (with pkgs; [
-      # 25.05
-      vim
       vesktop
       zed-editor
       osu-lazer-bin
-      ghostty
-      nixd
-      nil
-      alejandra
-      starship
-      direnv
       lmstudio
-      fastfetch
-      tree
       wlx-overlay-s
       obsidian
-      xdg-utils
       zoom-us
       spotify
-      ollama-cuda
       google-chrome
       vrcx
       _1password-gui
@@ -35,16 +23,33 @@
       unityhub
       claude-code
       bs-manager
-      nix-index
-      wl-clipboard
       alcom
       wineWowPackages.stable # 64bit + 32bit対応
       winetricks
-      slack
       lutris
     ])
     ++ (with pkgs-stable; [
-      # stable 25.05
+      # stable 25.11
+      vim
+      nixd
+      nil
+      alejandra
+      starship
+      fastfetch
+      tree
+      xdg-utils
+      nix-index
+      wl-clipboard
+      ollama-cuda
+      slack
+      ghostty
+      direnv
+      libreoffice
+      signal-desktop
+      termius
+      kdePackages.dolphin
+      bat
+      jq
     ])
     ++ (with pkgs-xr; [
       # nixpkgs-xr
