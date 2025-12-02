@@ -1,7 +1,6 @@
 {
   pkgs,
   pkgs-stable,
-  pkgs-xr,
   ...
 }: {
   home.packages =
@@ -46,8 +45,5 @@
       termius
       bat
       jq
-    ])
-    ++ (with pkgs-xr; [
-      # nixpkgs-xr
     ]);
 }
