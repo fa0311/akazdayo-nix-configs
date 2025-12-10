@@ -31,6 +31,8 @@
       google-chrome
       osu-lazer-bin
       nautilus
+      code-cursor
+      unar
 
       # Hyprlandエコシステム
       fuzzel # アプリランチャー

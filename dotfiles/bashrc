@@ -7,3 +7,5 @@ alias "alcom"="GDK_BACKEND=x11 __NV_DISABLE_EXPLICIT_SYNC=1 WEBKIT_DISABLE_DMABU
 export PATH="/home/akazdayo/.bun/bin:$PATH"
 export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
 export NIX_SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
+
+export HISTTIMEFORMAT="%F %T "
