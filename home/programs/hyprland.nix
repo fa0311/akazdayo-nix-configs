@@ -3,7 +3,9 @@
   pkgs,
   lib,
   ...
-}: {
+}: let
+  wallpaper = ../../wallpapers/milk.png;
+in {
   wayland.windowManager.hyprland = {
     enable = true;
     xwayland.enable = true;
@@ -13,7 +15,21 @@
       # モニター設定(240Hz対応)
       monitor = [
         "DP-1,1920x1080@240,0x0,1"
-        ",preferred,auto,1" # その他のモニター
+        "HDMI-A-1,1920x1080@60,1920x0,1"
+      ];
+
+      # ワークスペースをDP-1に割り当て（メインディスプレイ化）
+      workspace = [
+        "1, monitor:DP-1, default:true"
+        "2, monitor:DP-1"
+        "3, monitor:DP-1"
+        "4, monitor:DP-1"
+        "5, monitor:DP-1"
+        "6, monitor:HDMI-A-1"
+        "7, monitor:HDMI-A-1"
+        "8, monitor:HDMI-A-1"
+        "9, monitor:HDMI-A-1"
+        "10, monitor:HDMI-A-1"
       ];
 
       # 環境変数
@@ -25,17 +41,19 @@
       # 実行時起動
       exec-once = [
         "waybar"
+        "fcitx5 -d --replace" # fcitx5を最初に起動
         "dunst"
         "swww-daemon"
         "nm-applet --indicator"
         "blueman-applet"
         "wl-paste --type text --watch cliphist store"
         "wl-paste --type image --watch cliphist store"
+        "sleep 1 && swww img ${wallpaper} --transition-type fade"
       ];
 
       # 入力設定
       input = {
-        kb_layout = "us";
+        kb_layout = "jp";
         follow_mouse = 1;
 
         touchpad = {
@@ -69,10 +87,12 @@
           vibrancy = 0.1696;
         };
 
-        drop_shadow = true;
-        shadow_range = 4;
-        shadow_render_power = 3;
-        "col.shadow" = "rgba(1a1a1aee)";
+        shadow = {
+          enabled = true;
+          range = 4;
+          render_power = 3;
+          color = "rgba(1a1a1aee)";
+        };
       };
 
       # アニメーション
@@ -121,18 +141,19 @@
         "$mod, R, exec, fuzzel"
         "$mod, P, pseudo,"
         "$mod, J, togglesplit,"
-
-        # フォーカス移動
-        "$mod, left, movefocus, l"
-        "$mod, right, movefocus, r"
-        "$mod, up, movefocus, u"
-        "$mod, down, movefocus, d"
+        "$mod SHIFT, F, fullscreen,"
 
         # vim-likeキーバインド
         "$mod, h, movefocus, l"
         "$mod, l, movefocus, r"
         "$mod, k, movefocus, u"
         "$mod, j, movefocus, d"
+
+        # vim-likeキーバインド（ウィンドウ位置移動）
+        "$mod SHIFT, h, movewindow, l"
+        "$mod SHIFT, l, movewindow, r"
+        "$mod SHIFT, k, movewindow, u"
+        "$mod SHIFT, j, movewindow, d"
 
         # ワークスペース切り替え
         "$mod, 1, workspace, 1"
@@ -166,7 +187,7 @@
         "$mod, C, exec, cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"
 
         # ロック
-        "$mod, L, exec, swaylock"
+        "$mod, @, exec, swaylock"
 
         # スクロール(ワークスペース)
         "$mod, mouse_down, workspace, e+1"
@@ -180,13 +201,10 @@
       ];
 
       # ウィンドウルール
-      windowrule = [
-        "float, ^(pavucontrol)$"
-        "float, ^(blueman-manager)$"
-        "float, ^(nm-connection-editor)$"
-      ];
-
       windowrulev2 = [
+        "float,class:^(pavucontrol)$"
+        "float,class:^(blueman-manager)$"
+        "float,class:^(nm-connection-editor)$"
         "opacity 0.90 0.90,class:^(ghostty)$"
         "opacity 0.95 0.95,class:^(code)$"
       ];
@@ -196,7 +214,7 @@
   # Waybar設定
   programs.waybar = {
     enable = true;
-    systemd.enable = true;
+    systemd.enable = false;
     settings = {
       mainBar = {
         layer = "top";
@@ -337,8 +355,4 @@
       };
     };
   };
-
-  # Swaylock設定
-  # swaylock-effectsを使用（packages.nixで追加済み）
-  # 設定ファイルはfiles.nixでdotfilesから読み込み
 }

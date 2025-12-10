@@ -1,4 +1,7 @@
 {pkgs, config, ...}: {
+  # NVIDIAドライバ（Waylandでも必要）
+  services.xserver.videoDrivers = ["nvidia"];
+
   # Hyprland有効化
   programs.hyprland = {
     enable = true;
@@ -24,6 +27,12 @@
     WLR_NO_HARDWARE_CURSORS = "1"; # NVIDIAカーソル問題回避
     NIXOS_OZONE_WL = "1"; # Electron (Vesktop等)
     MOZ_ENABLE_WAYLAND = "1"; # Firefox
+
+    # fcitx5 IME設定
+    GTK_IM_MODULE = "fcitx";
+    QT_IM_MODULE = "fcitx";
+    XMODIFIERS = "@im=fcitx";
+    GLFW_IM_MODULE = "ibus"; # ゲーム用
   };
 
   # XDGポータル(スクリーンシェア、ファイルピッカー)

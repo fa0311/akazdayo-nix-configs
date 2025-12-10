@@ -30,6 +30,7 @@
       _1password-gui
       google-chrome
       osu-lazer-bin
+      nautilus
 
       # Hyprlandエコシステム
       fuzzel # アプリランチャー
