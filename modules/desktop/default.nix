@@ -1,4 +1,10 @@
 {pkgs, ...}: {
+  imports = [
+    ./wayland/login.nix
+    ./wayland/hyprland.nix
+    ./wayland/variable.nix
+  ];
+
   # NVIDIAドライバ（Waylandでも必要）
   services.xserver.videoDrivers = ["nvidia"];
 
