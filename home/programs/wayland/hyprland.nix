@@ -52,6 +52,7 @@ in {
       input = {
         kb_layout = "jp";
         follow_mouse = 1;
+        accel_profile = "flat"; # マウス加速をオフ
 
         touchpad = {
           natural_scroll = false;
