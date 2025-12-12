@@ -50,10 +50,9 @@ pkgs.stdenv.mkDerivation {
 
     # 作業用の一時ディレクトリを作成して展開
     mkdir -p build_tmp
-    unar $src -d build_tmp
+    unar $src
+    mv ./"Milk Cursor"/Milk1/ ./build_tmp/
     cd build_tmp
-
-    echo "Converting cursors..."
 
     # NixのMap定義をbashのロジックに展開して実行
     # findコマンドを使ってファイル名の一部(key)に一致するファイルを探します
@@ -61,21 +60,10 @@ pkgs.stdenv.mkDerivation {
         primary = builtins.head names;
         aliases = builtins.tail names;
       in ''
-        # キー: "${key}" -> メイン名: "${primary}"
-        # 日本語ファイル名を含むファイルを検索 (スペースが含まれる場合に対応)
         targetFile=$(find . -maxdepth 2 -name "*${key}*.ani" -o -name "*${key}*.cur" | head -n 1)
 
         if [ -n "$targetFile" ]; then
-          echo "  Processing: $targetFile -> ${primary}"
-
-          # win2xcurで変換 (出力先を指定)
-          # -o でディレクトリを指定すると元のファイル名で出力されるため、
-          # 一旦変換してからリネームするよりも、ここで一気に処理します
-
           win2xcur "$targetFile" -o "$cursorDir/" >/dev/null
-
-          # win2xcurは拡張子を取った名前で出力するので、それを捕まえてリネーム
-          # (例: "Milk1 通常.ani" -> "Milk1 通常")
           originalBaseName=$(basename "$targetFile")
           generatedFile="$cursorDir/''${originalBaseName%.*}"
 
