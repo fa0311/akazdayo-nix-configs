@@ -9,6 +9,7 @@
       nixd
       nil
       alejandra
+      nixfmt
       starship
       fastfetch
       tree

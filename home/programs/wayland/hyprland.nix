@@ -1,6 +1,8 @@
-{...}: let
+{ ... }:
+let
   wallpaper = ../../../wallpapers/milk.png;
-in {
+in
+{
   wayland.windowManager.hyprland = {
     enable = true;
     xwayland.enable = true;
@@ -29,14 +31,14 @@ in {
 
       # 環境変数
       env = [
-        "XCURSOR_THEME,MilkCursor"
+        "XCURSOR_THEME,MyCustomCursor"
         "XCURSOR_SIZE,24"
         "HYPRCURSOR_SIZE,24"
       ];
 
       # 実行時起動
       exec-once = [
-        "hyprctl setcursor MilkCursor 24"
+        "hyprctl setcursor MyCustomCursor 24"
         "waybar"
         "fcitx5 -d --replace" # fcitx5を最初に起動
         "dunst"

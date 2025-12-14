@@ -19,7 +19,7 @@ let
     "ペン"       = [ "pencil" ];
   };
 
-  themeName = "MilkCursor";
+  themeName = "MyCustomCursor";
 
 in
 pkgs.stdenv.mkDerivation {
