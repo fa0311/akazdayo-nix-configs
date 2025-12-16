@@ -60,7 +60,7 @@ in
           natural_scroll = false;
         };
 
-        sensitivity = 0; # -1.0 - 1.0, 0はデフォルト
+        sensitivity = 1.0; # -1.0 - 1.0, 0はデフォルト
       };
 
       # 一般設定

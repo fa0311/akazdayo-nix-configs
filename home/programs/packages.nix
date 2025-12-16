@@ -18,7 +18,6 @@
       wl-clipboard
       slack
       ghostty
-      direnv
       libreoffice
       signal-desktop
       termius
@@ -35,7 +34,6 @@
       nautilus
       code-cursor
       unar
-      tmux
       kooha
 
       # Hyprlandエコシステム
