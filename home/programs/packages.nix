@@ -21,7 +21,6 @@
       libreoffice
       signal-desktop
       termius
-      bat
       jq
       wget
       lmstudio
@@ -35,6 +34,9 @@
       code-cursor
       unar
       kooha
+      yt-dlp
+      ffmpeg
+      spicetify-cli
 
       # Hyprlandエコシステム
       fuzzel # アプリランチャー
@@ -74,4 +76,8 @@
       winetricks
       lutris
     ]);
+
+  programs.vscode = {
+    enable = true;
+  };
 }

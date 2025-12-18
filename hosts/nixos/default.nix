@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   imports = [
     ../../hardware-configuration.nix
     ../../modules/boot
@@ -12,7 +13,10 @@
     ../../modules/virtualization
   ];
 
-  nix.settings.experimental-features = ["nix-command" "flakes"];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
   nixpkgs.config.allowUnfree = true;
 
@@ -21,6 +25,10 @@
   programs.nix-ld.enable = true;
 
   services.printing.enable = true;
+
+  services.cloudflared = {
+    enable = true;
+  };
 
   environment.systemPackages = with pkgs; [
     vim

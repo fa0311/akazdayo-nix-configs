@@ -8,6 +8,10 @@
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixvim = {
+      url = "github:nix-community/nixvim/nixos-25.11";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
@@ -15,6 +19,7 @@
     nixpkgs,
     nixpkgs-unstable,
     home-manager,
+    nixvim,
   }: let
     system = "x86_64-linux";
     pkgs-unstable = import nixpkgs-unstable {
@@ -35,7 +40,10 @@
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.users.akazdayo = import ./home;
-          home-manager.extraSpecialArgs = {inherit pkgs-unstable;};
+          home-manager.extraSpecialArgs = {
+            inherit pkgs-unstable;
+            nixvim-module = nixvim.homeModules.nixvim;
+          };
         }
       ];
     };

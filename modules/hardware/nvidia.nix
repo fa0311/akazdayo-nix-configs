@@ -1,4 +1,5 @@
-{pkgs, config, ...}: {
+{ pkgs, config, ... }:
+{
   hardware.nvidia = {
     modesetting.enable = true;
     open = true;
@@ -17,8 +18,10 @@
     ];
   };
 
-  boot.kernelModules = ["nvidia-uvm"];
+  boot.kernelModules = [ "nvidia-uvm" ];
+
+  hardware.nvidia-container-toolkit.enable = true;
 
   # Wayland用カーネルパラメータ
-  boot.kernelParams = ["nvidia.NVreg_PreserveVideoMemoryAllocations=1"];
+  boot.kernelParams = [ "nvidia.NVreg_PreserveVideoMemoryAllocations=1" ];
 }
