@@ -6,6 +6,7 @@
 {
   home.packages =
     (with pkgs; [
+      devenv
       vim
       nixd
       nil
@@ -36,9 +37,7 @@
       kooha
       yt-dlp
       ffmpeg
-      gemini-cli-bin
       btop-cuda
-      kitty
       tailscale
 
       # Hyprlandエコシステム
@@ -70,7 +69,6 @@
     ++ (with pkgs-unstable; [
       # unstable 26.05
       vesktop
-      zed-editor
       obsidian
       zoom-us
       spotify
@@ -78,10 +76,8 @@
       gh
       unityhub
       claude-code
-      bs-manager
       wineWowPackages.stable # 64bit + 32bit対応
       winetricks
-      lutris
       opencode
       nvtopPackages.nvidia
       protonup-qt

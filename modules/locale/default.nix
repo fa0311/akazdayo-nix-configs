@@ -29,6 +29,7 @@
 
   fonts.packages = with pkgs; [
     noto-fonts-cjk-sans
+    noto-fonts
     noto-fonts-cjk-serif
     noto-fonts-color-emoji
     ipafont
@@ -37,4 +38,5 @@
     nerd-fonts.fira-code
     fira-code
   ];
+  fonts.fontDir.enable = true;
 }
