@@ -6,7 +6,7 @@
     ./programs/hyprland.nix
     ./programs/cursor.nix
     ./programs/nushell.nix
-    ./programs/nixvim.nix
+    ./programs/nixvim
   ];
   home.stateVersion = "25.11";
 }
