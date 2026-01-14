@@ -18,4 +18,14 @@
       "nofail"
     ];
   };
+
+  fileSystems."/mnt/windows" = {
+    device = "/dev/disk/by-uuid/9660FCA060FC886F";
+    fsType = "ntfs";
+    options = [
+      "rw"
+      "uid=1000"
+      "nofail"
+    ];
+  };
 }
