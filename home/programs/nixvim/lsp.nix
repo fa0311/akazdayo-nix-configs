@@ -14,6 +14,7 @@
         ty.enable = true;
         ruff.enable = true;
         astro.enable = true;
+        gopls.enable = true;
       };
     };
 

@@ -39,6 +39,7 @@
       ffmpeg
       btop-cuda
       tailscale
+      lazygit
 
       # Hyprlandエコシステム
       fuzzel # アプリランチャー
@@ -61,6 +62,17 @@
       libsForQt5.qt5ct # Qtテーマ設定
       kdePackages.qt6ct
       polkit_gnome # 認証エージェント
+      vlc
+      wineWowPackages.stable # 64bit + 32bit対応
+      winetricks
+      vesktop
+      obsidian
+      vrcx
+      gh
+      unityhub
+      opencode
+      nvtopPackages.nvidia
+      protonup-qt
     ])
     ++ (with pkgs.cudaPackages_12_8; [
       # CUDA 12.8 (機械学習用)
@@ -68,20 +80,6 @@
     ])
     ++ (with pkgs-unstable; [
       # unstable 26.05
-      vesktop
-      obsidian
-      zoom-us
-      spotify
-      vrcx
-      gh
-      unityhub
-      claude-code
-      wineWowPackages.stable # 64bit + 32bit対応
-      winetricks
-      opencode
-      nvtopPackages.nvidia
-      protonup-qt
-      vlc
     ]);
 
   programs.vscode = {
