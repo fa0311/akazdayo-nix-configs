@@ -2,6 +2,7 @@
 {
   imports = [
     ./ui
+    ./other
     ./editor
   ];
 }

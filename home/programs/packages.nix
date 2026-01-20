@@ -70,7 +70,6 @@
       vrcx
       gh
       unityhub
-      opencode
       nvtopPackages.nvidia
       protonup-qt
     ])
@@ -80,6 +79,7 @@
     ])
     ++ (with pkgs-unstable; [
       # unstable 26.05
+      opencode
     ]);
 
   programs.vscode = {
