@@ -17,6 +17,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
+
+    # QuickShell
+    noctalia = {
+      url = "github:noctalia-dev/noctalia-shell";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -28,7 +34,8 @@
       nixvim,
       lanzaboote,
       nix-flatpak,
-    }:
+      noctalia,
+    }@inputs:
     let
       system = "x86_64-linux";
       pkgs-unstable = import nixpkgs-unstable {
@@ -40,7 +47,7 @@
       nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
         inherit system;
         specialArgs = {
-          inherit self pkgs-unstable;
+          inherit self pkgs-unstable inputs;
         };
         modules = [
           ./configuration.nix
@@ -53,7 +60,7 @@
             home-manager.useUserPackages = true;
             home-manager.users.akazdayo = import ./home;
             home-manager.extraSpecialArgs = {
-              inherit pkgs-unstable;
+              inherit pkgs-unstable inputs;
               nixvim-module = nixvim.homeModules.nixvim;
             };
           }

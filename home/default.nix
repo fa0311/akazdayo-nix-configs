@@ -1,9 +1,12 @@
-{...}: {
+{ inputs, ... }:
+{
   imports = [
+    inputs.noctalia.homeModules.default
     ./programs/git.nix
     ./programs/files.nix
     ./programs/packages.nix
-    ./programs/hyprland.nix
+    ./programs/noctalia.nix
+    ./programs/niri.nix
     ./programs/cursor.nix
     ./programs/nushell.nix
     ./programs/nixvim

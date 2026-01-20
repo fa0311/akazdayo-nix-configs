@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 {
   imports = [
     ../../hardware-configuration.nix
@@ -41,13 +41,14 @@
   };
 
   services.sunshine = {
-    enable=true;
-    autoStart=false;
-    openFirewall=true;
-    capSysAdmin=true;
+    enable = true;
+    autoStart = false;
+    openFirewall = true;
+    capSysAdmin = true;
   };
   environment.systemPackages = with pkgs; [
     vim
+    inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 
   system.stateVersion = "25.11";

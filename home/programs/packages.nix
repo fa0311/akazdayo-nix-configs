@@ -41,23 +41,12 @@
       tailscale
       lazygit
 
-      # Hyprlandエコシステム
-      fuzzel # アプリランチャー
-      swww # 壁紙(アニメーション対応)
-      grim # スクリーンショット
-      slurp # 領域選択
-      swappy # スクリーンショット編集
-      cliphist # クリップボード履歴
-      swaylock-effects # スクリーンロック
-      swayidle # アイドル管理
+      # Wayland共通ツール
       brightnessctl # 輝度調整
       playerctl # メディアコントロール
       pavucontrol # 音量設定GUI
       networkmanagerapplet # ネットワーク管理
       blueman # Bluetooth管理
-      wlogout # ログアウトメニュー
-      hyprpicker # カラーピッカー
-      hyprcursor # カーソルテーマ
       nwg-look # GTKテーマ設定
       libsForQt5.qt5ct # Qtテーマ設定
       kdePackages.qt6ct
