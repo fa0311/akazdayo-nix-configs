@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, pkgs-unstable, ... }:
 {
   imports = [
     ./wayland/login.nix
@@ -16,7 +16,8 @@
       xdg-desktop-portal-gnome
       xdg-desktop-portal-gtk
     ];
-    config.common.default = "*";
+    # niri-portals.conf を使用してポータルの優先順位を設定
+    configPackages = [ pkgs-unstable.niri ];
   };
 
   # 認証ダイアログ用
