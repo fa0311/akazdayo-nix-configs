@@ -7,6 +7,7 @@
 {
   home.packages =
     (with pkgs; [
+      vrcli
       devenv
       vim
       nixd
