@@ -142,7 +142,7 @@ in
         // You can change how the focus ring looks.
         focus-ring {
             // Uncomment this line to disable the focus ring.
-            // off
+            off
 
             // How many logical pixels the ring extends out from the windows.
             width 4
