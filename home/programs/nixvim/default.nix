@@ -3,6 +3,7 @@
   imports = [
     nixvim-module
     ./opts.nix
+    ./keymaps.nix
     ./colorscheme.nix
     ./plugins
     ./lsp.nix

@@ -296,6 +296,12 @@ in
     // Find more information on the wiki:
     // https://yalter.github.io/niri/Configuration:-Window-Rules
 
+    // Set the overview wallpaper on the backdrop.
+    layer-rule {
+        match namespace="^noctalia-overview*"
+        place-within-backdrop true
+    }
+
     // Work around WezTerm's initial configure bug
     // by setting an empty default-column-width.
     window-rule {

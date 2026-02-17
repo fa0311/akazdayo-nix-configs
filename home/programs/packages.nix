@@ -7,6 +7,8 @@
 {
   home.packages =
     (with pkgs; [
+      comma
+      creator-companion-tui
       vrcli
       devenv
       vim
@@ -31,7 +33,6 @@
       wlx-overlay-s
       tor-browser
       alcom
-      _1password-gui
       google-chrome
       osu-lazer-bin
       nautilus
@@ -84,5 +85,6 @@
       protonvpn-gui
       wireguard-tools
       codex
+      bs-manager
     ]);
 }

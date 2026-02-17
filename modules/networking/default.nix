@@ -3,6 +3,7 @@
   imports = [
     ./tailscale.nix
     ./cloudflared.nix
+    ./vpn.nix
   ];
 
   networking.hostName = "nixos";
