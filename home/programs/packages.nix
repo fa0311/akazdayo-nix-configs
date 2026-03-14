@@ -7,6 +7,7 @@
 {
   home.packages =
     (with pkgs; [
+      gimp
       godot_4
       comma
       creator-companion-tui
@@ -76,6 +77,7 @@
     ++ (with pkgs-with-llm-agents.llm-agents; [
       # LLM Agents from numtide/llm-agents.nix
       opencode
+      codex
     ])
     ++ (with pkgs.cudaPackages_12_8; [
       # CUDA 12.8 (機械学習用)
@@ -86,7 +88,6 @@
       wayvr
       protonvpn-gui
       wireguard-tools
-      codex
       bs-manager
     ]);
 }
