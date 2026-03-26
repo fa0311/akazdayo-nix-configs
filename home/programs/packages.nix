@@ -77,6 +77,7 @@
       # LLM Agents from numtide/llm-agents.nix
       opencode
       codex
+      claude-code
     ])
     ++ (with pkgs.cudaPackages_12_8; [
       # CUDA 12.8 (機械学習用)
