@@ -7,6 +7,7 @@
 {
   home.packages =
     (with pkgs; [
+      prismlauncher
       gimp
       godot_4
       comma

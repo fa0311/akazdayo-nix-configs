@@ -10,7 +10,6 @@ in
   services.flatpak = {
     enable = true;
     packages = [
-      "org.prismlauncher.PrismLauncher"
       "org.gnome.Snapshot"
       #{
       #  flatpakref = alvrFlatpakrefUrl;
