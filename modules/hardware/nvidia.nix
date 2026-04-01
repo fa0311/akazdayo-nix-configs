@@ -17,6 +17,7 @@
       nvidia-vaapi-driver # VA-API追加
       libva
       libva-utils
+      config.boot.kernelPackages.nvidiaPackages.stable # NVENC/CUDA用
     ];
   };
 

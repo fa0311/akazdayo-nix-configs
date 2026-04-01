@@ -12,6 +12,7 @@ in
       "docker"
       "video"
       "render"
+      "input"
     ];
     shell = pkgs.nushell;
     openssh.authorizedKeys.keys = [
