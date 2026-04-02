@@ -7,6 +7,7 @@
     ../../modules/locale
     ../../modules/users
     ../../modules/virtualization
+    ../../modules/containers
     ./hardware-configuration.nix
   ];
 
