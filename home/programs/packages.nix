@@ -88,7 +88,6 @@
     ++ (with pkgs-unstable; [
       # unstable 26.05
       wayvr
-      protonvpn-gui
       wireguard-tools
       bs-manager
     ]);
