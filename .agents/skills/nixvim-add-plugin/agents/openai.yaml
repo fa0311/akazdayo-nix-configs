@@ -1,0 +1,4 @@
+interface:
+  display_name: "NixVim Add Plugin"
+  short_description: "Add plugins to this repo's NixVim setup"
+  default_prompt: "Use $nixvim-add-plugin to add or migrate a Neovim plugin in this repo's NixVim configuration."
