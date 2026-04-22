@@ -283,6 +283,26 @@
         "type": "github"
       }
     },
+    "minecraft-nix": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1776862171,
+        "narHash": "sha256-UkxQEg6Ywqb8vRhj0jeKdPPldVg/xjhawFDRAEZnNOA=",
+        "owner": "akazdayo",
+        "repo": "minecraft-nix",
+        "rev": "daafda20be75145daf419e029b14f50744b1ae7e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "akazdayo",
+        "repo": "minecraft-nix",
+        "type": "github"
+      }
+    },
     "nix-flatpak": {
       "locked": {
         "lastModified": 1767983141,
@@ -466,6 +486,7 @@
         "home-manager": "home-manager",
         "lanzaboote": "lanzaboote",
         "llm-agents": "llm-agents",
+        "minecraft-nix": "minecraft-nix",
         "nix-flatpak": "nix-flatpak",
         "nixpkgs": "nixpkgs_2",
         "nixpkgs-unstable": "nixpkgs-unstable",

@@ -1,0 +1,21 @@
+{
+  "instances": {
+    "survival": {
+      "artifacts": [
+        {
+          "filename": "fabric-server-1.21.4-0.19.2-1.1.1.jar",
+          "hash": "sha256-fFFNJKpSiwIPzDbfNZvEtEZmb53UHd5oZx4+3NdM73Y=",
+          "ref": "server:fabric:1.21.4:0.19.2:1.1.1",
+          "url": "https://meta.fabricmc.net/v2/versions/loader/1.21.4/0.19.2/1.1.1/server/jar"
+        },
+        {
+          "filename": "lithium-fabric-0.15.3+mc1.21.4.jar",
+          "hash": "sha256-FTiR6NaYj+3/pQmIUacloTfD5coEqJqN9An+sxNiPrQ=",
+          "ref": "modrinth:auto:lithium:latest:release:false",
+          "url": "https://cdn.modrinth.com/data/gvQqBUqZ/versions/u8pHPXJl/lithium-fabric-0.15.3%2Bmc1.21.4.jar"
+        }
+      ]
+    }
+  },
+  "version": 1
+}

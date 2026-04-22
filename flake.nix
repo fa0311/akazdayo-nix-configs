@@ -25,6 +25,11 @@
     };
 
     llm-agents.url = "github:numtide/llm-agents.nix";
+
+    minecraft-nix = {
+      url = "github:akazdayo/minecraft-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -38,6 +43,7 @@
       nix-flatpak,
       noctalia,
       llm-agents,
+      minecraft-nix,
     }@inputs:
     let
       lib = nixpkgs.lib;

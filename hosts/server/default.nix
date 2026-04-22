@@ -8,6 +8,7 @@
     ../../modules/users/server.nix
     ../../modules/virtualization/server.nix
     ../../modules/containers/server.nix
+    ../../modules/gaming/minecraft-server.nix
     ./hardware-configuration.nix
   ];
 
