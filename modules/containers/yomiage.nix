@@ -1,6 +1,7 @@
-{ pkgs, ... }:
+{ pkgs, pkgs-unstable, ... }:
 let
   appName = "omni-tts-discord";
+  bunPkg = pkgs-unstable.bun;
   appSource = pkgs.fetchFromGitHub {
     owner = "akazdayo";
     repo = "omni-tts-discord";
@@ -91,7 +92,7 @@ in
               --exclude voices \
               ${sourceRoot}/ ${appRoot}/
 
-            ${pkgs.bun}/bin/bun install --frozen-lockfile
+            ${bunPkg}/bin/bun install --frozen-lockfile
             ${pkgs.uv}/bin/uv sync --python ${pkgs.python314}/bin/python --frozen --no-dev
           '';
         };
@@ -139,7 +140,7 @@ in
               "BUN_INSTALL_CACHE_DIR=${cacheDir}/bun"
             ];
             EnvironmentFile = "/run/secrets/${appName}.env";
-            ExecStart = "${pkgs.bun}/bin/bun --env-file=/run/secrets/${appName}.env index.ts";
+            ExecStart = "${bunPkg}/bin/bun --env-file=/run/secrets/${appName}.env index.ts";
             Restart = "on-failure";
             RestartSec = "5s";
           };
