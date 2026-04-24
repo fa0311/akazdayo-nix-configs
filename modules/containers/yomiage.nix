@@ -26,7 +26,7 @@ in
     macvlans = [ "eno1" ];
     bindMounts = {
       "${sourceRoot}" = {
-        hostPath = appSource;
+        hostPath = "${appSource}";
         isReadOnly = true;
       };
       "/run/secrets/${appName}.env" = {
