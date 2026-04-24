@@ -1,15 +1,25 @@
 { pkgs, ... }:
 let
   appName = "omni-tts-discord";
-  appSource = "/home/akazdayo/programs/voice-clone-bot-select";
+  appSource = pkgs.fetchFromGitHub {
+    owner = "akazdayo";
+    repo = "omni-tts-discord";
+    rev = "0210b255a010f8e95afa37d4088c9fd10229136b";
+    hash = "sha256-f7yYnqHTLqcXH0bn+Tg8YYAGmvT3ltJ/WTExXhz8NI0=";
+  };
   sourceRoot = "/mnt/${appName}-source";
   envFile = "/etc/${appName}.env";
   stateDir = "/var/lib/${appName}";
   appRoot = "${stateDir}/app";
   cacheDir = "${stateDir}/cache";
+  voiceDataDir = "${stateDir}/voices";
   containerIp = "192.168.11.64";
 in
 {
+  systemd.tmpfiles.rules = [
+    "d ${voiceDataDir} 0750 root root -"
+  ];
+
   containers.yomiage = {
     autoStart = true;
     privateNetwork = true;
@@ -22,6 +32,10 @@ in
       "/run/secrets/${appName}.env" = {
         hostPath = envFile;
         isReadOnly = true;
+      };
+      "${appRoot}/voices" = {
+        hostPath = voiceDataDir;
+        isReadOnly = false;
       };
     };
 
@@ -74,6 +88,7 @@ in
               --exclude .direnv \
               --exclude .venv \
               --exclude node_modules \
+              --exclude voices \
               ${sourceRoot}/ ${appRoot}/
 
             ${pkgs.bun}/bin/bun install --frozen-lockfile
