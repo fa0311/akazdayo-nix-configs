@@ -1,0 +1,136 @@
+{ pkgs, ... }:
+let
+  appName = "omni-tts-discord";
+  appSource = "/home/akazdayo/programs/voice-clone-bot-select";
+  sourceRoot = "/mnt/${appName}-source";
+  envFile = "/etc/${appName}.env";
+  stateDir = "/var/lib/${appName}";
+  appRoot = "${stateDir}/app";
+  cacheDir = "${stateDir}/cache";
+  containerIp = "192.168.11.64";
+in
+{
+  containers.yomiage = {
+    autoStart = true;
+    privateNetwork = true;
+    macvlans = [ "eno1" ];
+    bindMounts = {
+      "${sourceRoot}" = {
+        hostPath = appSource;
+        isReadOnly = true;
+      };
+      "/run/secrets/${appName}.env" = {
+        hostPath = envFile;
+        isReadOnly = true;
+      };
+    };
+
+    config =
+      { ... }:
+      {
+        networking.hostName = "yomiage";
+        networking.interfaces.mv-eno1 = {
+          useDHCP = false;
+          ipv4.addresses = [
+            {
+              address = containerIp;
+              prefixLength = 24;
+            }
+          ];
+        };
+        networking.defaultGateway = "192.168.11.1";
+        networking.nameservers = [ "1.1.1.1" ];
+
+        systemd.tmpfiles.rules = [
+          "d ${stateDir} 0750 root root -"
+          "d ${appRoot} 0750 root root -"
+          "d ${cacheDir} 0750 root root -"
+          "d ${cacheDir}/bun 0750 root root -"
+          "d ${cacheDir}/uv 0750 root root -"
+        ];
+
+        systemd.services.omni-tts-discord-setup = {
+          description = "Prepare omni-tts-discord runtime dependencies";
+          after = [ "network-online.target" ];
+          wants = [ "network-online.target" ];
+          before = [
+            "omni-tts-discord-api.service"
+            "omni-tts-discord-bot.service"
+          ];
+          wantedBy = [ "multi-user.target" ];
+          serviceConfig = {
+            Type = "oneshot";
+            RemainAfterExit = true;
+            WorkingDirectory = appRoot;
+            TimeoutStartSec = "30min";
+          };
+          script = ''
+            export HOME=${stateDir}
+            export BUN_INSTALL_CACHE_DIR=${cacheDir}/bun
+            export UV_CACHE_DIR=${cacheDir}/uv
+
+            ${pkgs.rsync}/bin/rsync -a --delete \
+              --exclude .git \
+              --exclude .direnv \
+              --exclude .venv \
+              --exclude node_modules \
+              ${sourceRoot}/ ${appRoot}/
+
+            ${pkgs.bun}/bin/bun install --frozen-lockfile
+            ${pkgs.uv}/bin/uv sync --python ${pkgs.python314}/bin/python --frozen --no-dev
+          '';
+        };
+
+        systemd.services.omni-tts-discord-api = {
+          description = "omni-tts-discord FastAPI server";
+          wants = [ "network-online.target" ];
+          after = [
+            "network-online.target"
+            "omni-tts-discord-setup.service"
+          ];
+          requires = [ "omni-tts-discord-setup.service" ];
+          wantedBy = [ "multi-user.target" ];
+          serviceConfig = {
+            WorkingDirectory = "${appRoot}/packages/server";
+            Environment = [
+              "HOME=${stateDir}"
+              "OMNITTS_DEVICE=cpu"
+              "OMNITTS_DTYPE=float32"
+              "PYTHONUNBUFFERED=1"
+            ];
+            ExecStart = "${appRoot}/.venv/bin/python -m uvicorn main:app --host 0.0.0.0 --port 8000";
+            Restart = "on-failure";
+            RestartSec = "5s";
+          };
+        };
+
+        systemd.services.omni-tts-discord-bot = {
+          description = "omni-tts-discord Discord bot";
+          wants = [ "network-online.target" ];
+          after = [
+            "network-online.target"
+            "omni-tts-discord-api.service"
+            "omni-tts-discord-setup.service"
+          ];
+          requires = [
+            "omni-tts-discord-api.service"
+            "omni-tts-discord-setup.service"
+          ];
+          wantedBy = [ "multi-user.target" ];
+          serviceConfig = {
+            WorkingDirectory = "${appRoot}/packages/bot";
+            Environment = [
+              "HOME=${stateDir}"
+              "BUN_INSTALL_CACHE_DIR=${cacheDir}/bun"
+            ];
+            EnvironmentFile = "/run/secrets/${appName}.env";
+            ExecStart = "${pkgs.bun}/bin/bun --env-file=/run/secrets/${appName}.env index.ts";
+            Restart = "on-failure";
+            RestartSec = "5s";
+          };
+        };
+
+        system.stateVersion = "25.11";
+      };
+  };
+}
