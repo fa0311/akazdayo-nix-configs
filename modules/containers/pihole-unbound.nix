@@ -51,6 +51,11 @@ in
           };
         };
 
+        services.pihole-web = {
+          enable = true;
+          ports = [ "80o" ];
+        };
+
         networking.firewall = {
           allowedTCPPorts = [
             53
