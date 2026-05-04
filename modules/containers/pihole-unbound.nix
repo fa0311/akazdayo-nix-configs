@@ -40,6 +40,14 @@ in
 
         services.pihole-ftl = {
           enable = true;
+          lists = [
+            {
+              url = "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts";
+              type = "block";
+              enabled = true;
+              description = "StevenBlack Unified Hosts";
+            }
+          ];
           settings = {
             dns = {
               upstreams = [ "127.0.0.1#5335" ];
@@ -47,7 +55,6 @@ in
               bogusPriv = true;
               domainNeeded = true;
             };
-            webserver.port = "80o";
           };
         };
 
