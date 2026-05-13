@@ -40,6 +40,11 @@
     };
 
     nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
+
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -57,6 +62,7 @@
       llm-agents,
       minecraft-nix,
       nix-cachyos-kernel,
+      sops-nix,
     }@inputs:
     let
       lib = nixpkgs.lib;
@@ -108,6 +114,7 @@
             ./packages
             (./hosts + "/${hostName}")
             lanzaboote.nixosModules.lanzaboote
+            sops-nix.nixosModules.default
             home-manager.nixosModules.home-manager
             nix-flatpak.nixosModules.nix-flatpak
             {
@@ -116,6 +123,7 @@
               home-manager.users.${primaryUser} = import ./home;
               home-manager.extraSpecialArgs = {
                 inherit
+                  self
                   pkgs-unstable
                   pkgs-with-llm-agents
                   inputs
@@ -158,6 +166,7 @@
             ./packages
             (./hosts + "/${hostName}")
             lanzaboote.nixosModules.lanzaboote
+            sops-nix.nixosModules.default
             home-manager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
@@ -165,6 +174,7 @@
               home-manager.users.${primaryUser} = import ./home/server.nix;
               home-manager.extraSpecialArgs = {
                 inherit
+                  self
                   pkgs-unstable
                   pkgs-with-llm-agents
                   inputs
@@ -212,6 +222,7 @@
               home-manager.users.${primaryUser} = import ./home/darwin.nix;
               home-manager.extraSpecialArgs = {
                 inherit
+                  self
                   pkgs-unstable
                   pkgs-with-llm-agents
                   inputs
@@ -274,22 +285,26 @@
 
       checks = lib.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
 
-      devShells = forAllSystems (
-        system:
-        let
-          pkgs = import nixpkgs {
-            inherit system;
-            config.allowUnfree = true;
-          };
-        in
-        {
-          default = pkgs.mkShell {
-            packages = [
-              deploy-rs.packages.${system}.default
-              pkgs.nixfmt-rfc-style
-            ];
-          };
-        }
-      );
+    devShells = forAllSystems (
+      system:
+      let
+        pkgs = import nixpkgs {
+          inherit system;
+          config.allowUnfree = true;
+        };
+      in
+      {
+        default = pkgs.mkShell {
+          packages = [
+            deploy-rs.packages.${system}.default
+            pkgs.nixfmt-rfc-style
+            pkgs.sops
+            pkgs.age
+            pkgs.age-plugin-yubikey
+            pkgs.ssh-to-age
+          ];
+        };
+      }
+    );
     };
 }
