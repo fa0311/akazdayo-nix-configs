@@ -44,4 +44,11 @@ let
 in
 {
   _module.args.hostData = hostData;
+
+  nix.settings.extra-trusted-substituters = [
+    "https://attic.odango.app/main"
+  ];
+  nix.settings.extra-trusted-public-keys = [
+    "main:p1I0gblo5KOxd64LCmeOmENhGx/fRCVp5CS4aOQGY6w="
+  ];
 }
