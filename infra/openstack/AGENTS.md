@@ -27,8 +27,8 @@ infra/openstack/
 | Change instance config | `main.tf` | Compute, network, security group, floating IP |
 | Add/change input vars | `variables.tf` | New vars need `terraform.tfvars.example` entry |
 | Change bootstrap script | `cloud-init.yaml.tftpl` | Shell script injected via config-drive |
-| Debug bootstrap | `README.md` L123-158 | amazon-init status, manual bootstrap steps |
-| Validate offline | `README.md` L114-122 | `tofu validate` without credentials |
+| Debug bootstrap | `README.md` | amazon-init status, manual bootstrap steps |
+| Validate offline | `README.md` | `tofu validate` without credentials |
 
 ## CONVENTIONS
 - **Auth from env, never tracked**: `openrc.sh` sources `OS_*` env vars. No credentials in tracked files. Provider config uses env vars + `OS_CLOUD` fallback.
