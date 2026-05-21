@@ -1,6 +1,6 @@
 # AGENTS.md
 
-**Generated:** 2026-05-19 | **Commit:** 94337f6 | **Branch:** main
+**Generated:** 2026-05-22 | **Commit:** 951517d | **Branch:** main
 
 ## Build & Test Commands
 - **Apply Config (NixOS, preferred)**: `nh os switch` (auto-cleans old generations, 4d/3 gen retention)
@@ -12,21 +12,25 @@
 - **Update deps**: `nix flake update` (all) or `nix flake lock --update-input <name>`
 - **Dev shell**: `nix develop` (provides deploy-rs, nixfmt-rfc-style, sops, age tools)
 
+## CI (GitHub Actions)
+- **PR Build** (`pr-build.yml`): On PR to main — builds all 4 hosts (nixos, server, openstack on ubuntu-latest; macbook on macos-latest). Uses Cachix (read-only).
+- **Scheduled Update** (`flake-update.yml`): Every 3 days — updates flake.lock, builds all hosts, pushes to Cachix + Attic, commits updated lock file.
+- No formal NixOS tests exist. Verification is via `nix flake check`, dry-build, and CI builds.
+
 ## Architecture
 
 Import chain: `flake.nix` → host (`hosts/<name>/default.nix`) → profile (`profiles/<platform>/<type>.nix`) → module domain (`modules/<platform>/<domain>/<variant>.nix`)
 
-- `flake.nix`: Three builder functions — `mkHost` (desktop NixOS), `mkServer` (server NixOS), `mkDarwinHost` (macOS). Each constructs `hostMeta`, resolves `hostData`, wires `specialArgs` + `extraSpecialArgs`.
+- `flake.nix`: Four builder functions — `mkHost` (desktop NixOS), `mkServer` (server NixOS), `mkOpenStackHost` (cloud VM NixOS), `mkDarwinHost` (macOS). Each constructs `hostMeta`, resolves `hostData`, wires `specialArgs` + `extraSpecialArgs`.
 - **hostMeta** (passed to all NixOS + HM modules): `{ hostName, system, primaryUser, flakeRoot, hostData }`. `hostData` is resolved via a two-pass pattern: `baseHostMeta` → import `host-data.nix` → extract `_module.args.hostData` → merge into `hostMeta`.
 - **specialArgs (NixOS)**: `self`, `inputs`, `pkgs-unstable`, `hostMeta`
 - **extraSpecialArgs (home-manager)**: same as system + `pkgs-with-llm-agents` + `nixvim-module`
 - **Flake inputs** (14): nixpkgs (25.11), nixpkgs-unstable, home-manager, nix-darwin, nixvim, lanzaboote, deploy-rs, nix-flatpak, noctalia, llm-agents, minecraft-nix, nix-cachyos-kernel, sops-nix
-- **Outputs**: `nixosConfigurations.{nixos,server}`, `darwinConfigurations.macbook`, `deploy.nodes`, `checks` (deploy-rs), `devShells`
+- **Outputs**: `nixosConfigurations.{nixos,server,openstack}`, `darwinConfigurations.macbook`, `deploy.nodes`, `checks` (deploy-rs), `devShells`
 
 ## Code Style & Conventions
 - **Structure**: Platform-first modular Flake. System settings live under `modules/<platform>/`, user settings under `home/`.
 - **Modules**: Use `default.nix` as directory entry point for multi-file domains. Import sub-modules in `default.nix`.
-- **NixOS module naming**: Use host-type suffix — `desktop.nix` / `server.nix` per domain (e.g., `boot/desktop.nix`, `boot/server.nix`). Darwin modules use `default.nix` (single variant).
 - **Arguments**: Modules typically accept `{ pkgs, pkgs-unstable, ... }`. Host-aware modules also receive `hostMeta`; access host-specific values via `hostMeta.hostData.<key>` — never hardcode.
 - **Profile registration**: Profiles are pure aggregators (`{ imports = [...]; }`). NixOS desktop profile imports 15 modules; server imports 12.
 - **Registration**:
@@ -44,9 +48,9 @@ Import chain: `flake.nix` → host (`hosts/<name>/default.nix`) → profile (`pr
   - `modules/nixos/`: NixOS system settings only.
   - `modules/darwin/`: Darwin system settings only.
   - `modules/shared/`: Cross-platform modules only. Must be safe to evaluate on both NixOS and Darwin. Currently a placeholder.
-  - `profiles/nixos/`: NixOS profile aggregators. Each file bundles modules for a host type (desktop, server).
+  - `profiles/nixos/`: NixOS profile aggregators. Each file bundles modules for a host type (desktop, server, openstack).
   - `profiles/darwin/`: Darwin profile aggregators.
-  - `home/profiles/`: Home Manager profile aggregators. Each file bundles program configs and package groups for a host type.
+  - `home/profiles/`: Home Manager profile aggregators. Each file bundles program configs and package groups for a host type (desktop, server, openstack, darwin).
   - `home/packages/`: Home Manager package groups by purpose. Each file sets `home.packages`. Platform-conditionals inside files (via `pkgs.stdenv.isLinux` or `hostMeta.hostName` checks) keep Darwin from inheriting Linux-only tools.
   - `home/programs/`: Per-program Home Manager configuration.
   - `packages/`: overlays and derivations only.
@@ -60,6 +64,7 @@ Import chain: `flake.nix` → host (`hosts/<name>/default.nix`) → profile (`pr
   - Do not mix unrelated domains in one file (example: desktop/locale/networking split).
 - **Naming**:
   - New file and directory names must use lowercase kebab-case.
+  - **NixOS module naming**: Primary convention is host-type suffix (`desktop.nix` / `server.nix` / `openstack.nix`) per domain. Exceptions: service-specific names (`minecraft-server.nix`, `cloudflared.nix`), feature-specific names (`nvidia.nix`, `cachyos-kernel.nix`), and aggregation entry points (`desktop/default.nix`). The domain directory name matches the primary option group; variant file names distinguish host type or feature.
 - **Profile Registration**:
   - New NixOS modules must be imported from a `profiles/nixos/*.nix` file, not directly from a host entry.
   - New Darwin modules must be imported from a `profiles/darwin/*.nix` file.
@@ -77,3 +82,14 @@ Import chain: `flake.nix` → host (`hosts/<name>/default.nix`) → profile (`pr
   - Current tracked encrypted files: `secrets/nixos/home.yaml`.
   - Other `secrets/` subdirectories contain only `.gitkeep` placeholders.
   - Legacy container secret paths (`/etc/nextcloud-adminpass`, `/etc/searx-env`) remain host-local files. Do not migrate them to sops-nix without an explicit task.
+- **Deploy Coverage**:
+  - `deploy-rs` nodes only cover `nixos` (192.168.11.48) and `server` (192.168.11.50). The `openstack` host is provisioned via OpenTofu + cloud-init bootstrap — not deploy-rs.
+  - Darwin hosts are not deployable via deploy-rs.
+- **Non-Standard Root Directories**:
+  - `cursors/`: Custom cursor theme derivations. Not a standard flake repo directory.
+  - `wallpapers/`: Static binary assets (.png) tracked in repo.
+  - `infra/`: OpenTofu/Terraform IaC for OpenStack provisioning. Separate from Nix config.
+  - `openrc.sh`: OpenStack auth helper script at repo root.
+  - `scripts/`: Does NOT exist (contrary to README tree diagram).
+  - `packages/` is dual-role: both a NixOS module (sets `nixpkgs.overlays` via auto-discovery) and a potential flake output container. The overlay auto-discovery (`builtins.readDir` + `callPackage`) is a bespoke pattern.
+  - `profiles/{nixos,darwin}/default.nix` and `home/profiles/default.nix` are empty placeholder scaffolds — not active entry points.
