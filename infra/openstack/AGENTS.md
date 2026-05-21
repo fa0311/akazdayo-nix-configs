@@ -4,7 +4,7 @@
 Parent: [root AGENTS.md](../../AGENTS.md)
 
 ## OVERVIEW
-OpenTofu/Terraform IaC for provisioning NixOS VMs on OpenStack. Bootstraps via cloud-init (amazon-init) running `nixos-rebuild boot` from the flake.
+OpenTofu/Terraform IaC for provisioning NixOS VMs on OpenStack. Bootstraps via amazon-init (NixOS built-in) running `nixos-rebuild boot` from the flake.
 
 ## STRUCTURE
 ```
@@ -14,7 +14,7 @@ infra/openstack/
 ├── outputs.tf               # instance_id, fixed_ip, floating_ip, ssh_host
 ├── providers.tf             # OpenStack provider (auth from env, NOT tracked)
 ├── versions.tf              # OpenTofu >= 1.6.0, openstack provider ~> 3.4
-├── cloud-init.yaml.tftpl    # Bootstrap template: amazon-init runs nixos-rebuild boot
+├── user-data.sh.tftpl        # Bootstrap template: amazon-init runs nixos-rebuild boot
 ├── terraform.tfvars.example # Example variable values
 ├── .terraform.lock.hcl      # Lock file — TRACKED in git
 ├── README.md                # Full provisioning guide
@@ -26,7 +26,7 @@ infra/openstack/
 |------|----------|-------|
 | Change instance config | `main.tf` | Compute, network, security group, floating IP |
 | Add/change input vars | `variables.tf` | New vars need `terraform.tfvars.example` entry |
-| Change bootstrap script | `cloud-init.yaml.tftpl` | Shell script injected via config-drive |
+| Change bootstrap script | `user-data.sh.tftpl` | Shell script injected via config-drive |
 | Debug bootstrap | `README.md` | amazon-init status, manual bootstrap steps |
 | Validate offline | `README.md` | `tofu validate` without credentials |
 
@@ -63,7 +63,7 @@ nix develop -c tofu -chdir=infra/openstack validate -var-file=terraform.tfvars.e
 - Changing `image_id`, `config_drive`, or `key_pair` on a live instance — destroys and recreates the VM.
 
 ## NOTES
-- Bootstrap uses **amazon-init** (NixOS built-in), not cloud-init. Script logs to `/var/log/nixos-bootstrap.log`.
+- Bootstrap uses **amazon-init** (NixOS built-in) to execute user_data as a shell script. Logs to `/var/log/nixos-bootstrap.log`.
 - First-boot SSH goes to `root` (OpenStack keypair injection), not the configured user. After bootstrap reboot, user config takes over.
 - The `openstack` host is NOT in `deploy.nodes` — provisioning + bootstrap replaces deploy-rs for this host.
 - The VM is considered **ephemeral** — most resource changes destroy and recreate the instance.
