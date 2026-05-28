@@ -11,6 +11,7 @@ in
         unityhub
         immich-go
         nvtopPackages.nvidia
+        cudaPackages.cuda_nvcc
       ])
     else
       (with pkgs; [
