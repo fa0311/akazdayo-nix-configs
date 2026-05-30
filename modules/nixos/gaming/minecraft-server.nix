@@ -2,10 +2,13 @@
   inputs,
   hostMeta,
   pkgs,
+  config,
   ...
 }:
 let
   minecraftData = hostMeta.hostData.minecraft or { };
+  inherit (config.services.minecraft-servers) runDir;
+  fabricSock = "${runDir}/fabric-smp.sock";
 in
 {
   imports = [ inputs.minecraft-nix.nixosModules.minecraft-servers ];
@@ -21,6 +24,12 @@ in
       enable = true;
       package = (pkgs.fabricServers.fabric-26_1_2.override { jre_headless = pkgs.jdk25; });
       jvmOpts = minecraftData.jvmOpts or "-Xms4G -Xmx8G";
+
+      extraStartPost = ''
+        sleep 30
+        ${pkgs.tmux}/bin/tmux -S ${fabricSock} send-keys \
+          "gamerule playersSleepingPercentage 0" Enter
+      '';
 
       serverProperties = {
         server-port = minecraftData.serverPort or 25565;
