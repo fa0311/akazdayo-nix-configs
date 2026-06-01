@@ -77,7 +77,6 @@ in
       };
 
       symlinks = {
-        "server-icon.png" = ./server-icon.png;
         mods = pkgs.linkFarmFromDrvs "mods" (
           builtins.attrValues {
             FabricApi = pkgs.fetchurl {
