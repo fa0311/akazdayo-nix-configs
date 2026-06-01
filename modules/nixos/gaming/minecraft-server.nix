@@ -111,6 +111,10 @@ in
             url = "https://cdn.modrinth.com/data/bfneejKo/versions/hiDPXGGO/syncmatica-fabric-26.1.1-0.3.18.jar";
             sha512 = "c48f6e658ffc8cdce8647a149237f5aa7c35bb0cb5037024eb2bb6e6f3e2be863a733a010543ad206e295c5088d9bb400f2bb7a6d47f6b24a61921868491e9f2";
           };
+          NakasyouBakeryMod = pkgs.fetchurl {
+            url = "https://github.com/zunoser/nakasyou-bakery-mod/releases/download/v1.4/nakasyou-bakery-mod-1.4.jar";
+            sha256 = "3b0f4f92a15d6a2f6bc5f3a7982b8515c1c7de72f88e5b0a1545258bfff4b857";
+          };
         }
       );
     };
