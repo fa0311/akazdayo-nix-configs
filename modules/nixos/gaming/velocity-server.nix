@@ -34,6 +34,7 @@ in
     # Generated at activation time with the decrypted forwarding secret.
     templates."velocity.toml" = {
       content = ''
+        config-version = "2.8"
         bind = "0.0.0.0:${proxyPort}"
         motd = "&#x00a7bNixOS Minecraft Network"
         show-max-players = 500
@@ -82,6 +83,10 @@ in
       files."velocity.toml" = config.sops.templates."velocity.toml".path;
     };
   };
+
+  systemd.services.minecraft-server-velocity.restartTriggers = [
+    config.sops.templates."velocity.toml".content
+  ];
 
   networking = {
     firewall.allowedUDPPorts = [ voiceChatPort ];
