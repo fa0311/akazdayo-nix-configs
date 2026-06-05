@@ -85,7 +85,17 @@ let
       }
     )
   );
-  creativeModsLink = pkgs.linkFarmFromDrvs "creative-mods" (builtins.attrValues commonMods);
+  creativeModsLink = pkgs.linkFarmFromDrvs "creative-mods" (
+    builtins.attrValues (
+      commonMods
+      // {
+        Axiom = pkgs.fetchurl {
+          url = "https://cdn.modrinth.com/data/N6n5dqoA/versions/AfA2Emww/Axiom-5.4.2-for-MC26.1.jar";
+          sha512 = "dac0681e5b377a8824153249559849eafb3a1e085b07c4586f10f3dd146a3aae935b998faef11c0bad1fbfb9e21d950ee21992af53790296bad8e7cc20b78a59";
+        };
+      }
+    )
+  );
 
   whitelist = {
     aomona = "02992baf-9329-4c6a-b893-3e4b5ce37ca1";
@@ -235,18 +245,11 @@ in
 
         inherit whitelist;
 
-        operators = {
-          moons14 = {
-            uuid = "ede38872-25c5-414f-a04e-278b521d9f41";
-            level = 4;
-            bypassesPlayerLimit = true;
-          };
-          akaz_dango = {
-            uuid = "644d4fc6-1525-4426-9eb9-7c7877883e81";
-            level = 4;
-            bypassesPlayerLimit = true;
-          };
-        };
+        operators = builtins.mapAttrs (_: uuid: {
+          inherit uuid;
+          level = 4;
+          bypassesPlayerLimit = true;
+        }) whitelist;
       }
       // {
         symlinks = {
